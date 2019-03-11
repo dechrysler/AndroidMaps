@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".DarAlta">
+
+<LinearLayout
+    android:id="@+id/linearLayout2"
+    android:layout_width="368dp"
+    android:layout_height="374dp"
+    android:orientation="vertical"
+    tools:ignore="MissingConstraints"
+    tools:layout_editor_absoluteX="8dp"
+    tools:layout_editor_absoluteY="44dp">
+
+    <EditText
+        android:id="@+id/etNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Nombre del Evento"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/etDescripcion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Descripcion"
+        android:inputType="textPersonName" />
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        mapbox:center_latitude="40.4167576"
+        mapbox:center_longitude="-3.7036814"
+        mapbox:style_url="@string/style_mapbox_streets"
+        mapbox:zoom="12"></com.mapbox.mapboxsdk.maps.MapView>
+</LinearLayout>
+
+<LinearLayout
+    android:layout_width="368dp"
+    android:layout_height="52dp"
+    android:layout_marginTop="21dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="20dp"
+    android:orientation="vertical"
+    mapbox:layout_constraintBottom_toBottomOf="parent"
+    mapbox:layout_constraintEnd_toEndOf="parent"
+    mapbox:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnGuardar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Guardar" />
+
+        <Button
+            android:id="@+id/btnSalir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Salir" />
+    </LinearLayout>
+</LinearLayout>
+</android.support.constraint.ConstraintLayout>

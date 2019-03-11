@@ -1,74 +1,84 @@
 package com.example.alumnot.mapps;
 
 import android.app.Activity;
-
-import android.location.Location;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mapbox.mapboxsdk.MapboxAccountManager;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.location.LocationServices;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.example.alumnot.mapps.base.Evento;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
 
-    private MapView mapaView;
-    private MapboxMap mapa;
-    private FloatingActionButton btUbicacion;
-    private LocationServices servicioUbicacion;
+public class MainActivity extends Activity implements View.OnClickListener {
+
+    public static List<Evento> eventos = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MapboxAccountManager.start(this, "pk.eyJ1IjoiZGVjaHJ5c2xlciIsImEiOiJjanNjNW8yZ3IwNmhlNDVueWYzaXNnMzF0In0.eFw8auSp5OEjuUvPqSgoOg");
         setContentView(R.layout.activity_main);
-        btUbicacion = (FloatingActionButton) findViewById(R.id.btUbicacion);
-        mapaView = (MapView) findViewById(R.id.mapaView);
-        mapaView.onCreate(savedInstanceState);
-        mapaView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(MapboxMap mapboxMap) {
-                mapa = mapboxMap;
-                mapboxMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(40.4167576, -3.7036814))
-                        .title("Madrid")
-                        .snippet("Esta es la ciudad de madrid"));
-            }
-        });
-        ubicarUsuario();
+        Button btnMapa = findViewById(R.id.btnMapa);
+        btnMapa.setOnClickListener(this);
+        Button btnAlta = findViewById(R.id.btnDarAlta);
+        btnAlta.setOnClickListener(this);
+        Button btnListar = findViewById(R.id.btnListar);
+        btnListar.setOnClickListener(this);
     }
-        private void ubicarUsuario() {
 
-            servicioUbicacion = LocationServices.getLocationServices(this);
-
-
-            btUbicacion.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if (mapa != null) {
-                         Location lastLocation = servicioUbicacion.getLastLocation();
-                        toask();
-                        if (lastLocation != null)
-                            mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLocation), 16));
-
-                        // Resalta la posición del usuario en el mapa
-                        mapa.setMyLocationEnabled(true);
-                    }
-                }
-            });
+    @Override
+    public void onClick(View view) {
+        Intent intent;
+        switch (view.getId()){
+            case R.id.btnMapa:
+                intent = new Intent(this,Maps.class);
+                startActivity(intent);
+                break;
+            case R.id.btnListar:
+                intent = new Intent(this,Mapa2.class);
+                startActivity(intent);
+                break;
+            case R.id.btnDarAlta:
+            intent = new Intent(this,DarAlta.class);
+            startActivity(intent);
+            break;
+        }
     }
-    public void toask(){
-        Toast.makeText(this,"hola",Toast.LENGTH_SHORT).show();
+    @Override
+    protected void onResume() {
+        // Recogemos las preferencias del sistema.
+        SharedPreferences pref = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        String nombre;
+        TextView algo = findViewById(R.id.textView);
+        boolean usingPreferences = pref.getBoolean("usingPreferencies", true);
+        if(usingPreferences) {
+            nombre =pref.getString("texto","Mapas");
+
+            algo.setText(nombre);
+            String prefColor = pref.getString("prefColor", "Azul");
+
+            if (prefColor.equals("Cyan"))
+                findViewById(R.id.layoutPrincipal).setBackgroundColor(Color.CYAN);
+            else if (prefColor.equals("Azul"))
+                findViewById(R.id.layoutPrincipal).setBackgroundColor(Color.BLUE);
+            else if (prefColor.equals("Verde"))
+                findViewById(R.id.layoutPrincipal).setBackgroundColor(Color.GREEN);
+            else
+                findViewById(R.id.layoutPrincipal).setBackgroundColor(Color.TRANSPARENT);
+
+        }else {
+            findViewById(R.id.layoutPrincipal).setBackgroundColor(Color.WHITE);
+            algo.setText("Mapas");
+        }
+        super.onResume();
+
     }
+
 }
-
 
